@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  /* Warna terang */
+  --color-ivory: #F7F3EE;
+  --color-sand: #EFE8E0;
+
+  /* Warna gelap — dark walnut */
+  --color-mocha: #3A2E2A;
+  --color-mocha-soft: #4A3C37;
+  --color-mocha-dark: #29201D;
+
+  /* Warna aksen */
+  --color-amber: #D89B5A;
+  --color-amber-dark: #B8763F;
+  --color-amber-soft: #EAD9C3;
+
+  /* Warna netral */
+  --color-taupe: #6B6156;
+  --color-warm-border: #E2D8CC;
+
+  --breakpoint-xs: 400px;
+
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-mocha);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  scroll-behavior: smooth;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background-color: rgba(247, 243, 238, 0.05);
+  border: 1px solid rgba(247, 243, 238, 0.1);
+  color: #F7F3EE;
+  font-size: 0.875rem;
+  transition: border-color 0.2s;
+}
+
+.form-input::placeholder {
+  color: rgba(247, 243, 238, 0.3);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #D89B5A;
+}
+
+section[id] {
+  scroll-margin-top: 90px;
+}
