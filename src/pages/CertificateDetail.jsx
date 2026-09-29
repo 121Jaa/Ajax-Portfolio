@@ -1,18 +1,17 @@
-import { useEffect, useState } from "react"
-import { useParams, Link, Navigate } from "react-router-dom"
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react";
+import { useParams, Link, Navigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   SiReact,
   SiTailwindcss,
   SiJavascript,
   SiHtml5,
-  SiCss,
   SiGit,
   SiSupabase,
   SiFramer,
   SiVite,
   SiTypescript,
-} from "react-icons/si"
+} from "react-icons/si";
 import {
   ArrowLeft,
   ArrowUp,
@@ -24,26 +23,27 @@ import {
   Share2,
   Sparkles,
   BadgeCheck,
-} from "lucide-react"
-import Swal from "sweetalert2"
+  Palette, // ← TAMBAH
+} from "lucide-react";
+import Swal from "sweetalert2";
 import {
   getCertificateBySlug,
   getAllCertificates,
-} from "../services/certificates"
+} from "../services/certificates";
 
 /* ============ SKILL ICON MAPPER ============ */
 const skillIconMap = {
   html: { icon: SiHtml5, color: "#E34F26" },
-  css: { icon: SiCss, color: "#1572B6" },
+  css: { icon: Palette, color: "#1572B6" },              // ← ganti SiCss
   javascript: { icon: SiJavascript, color: "#F7DF1E" },
   react: { icon: SiReact, color: "#61DAFB" },
   hooks: { icon: SiReact, color: "#61DAFB" },
   "component design": { icon: SiReact, color: "#61DAFB" },
   tailwind: { icon: SiTailwindcss, color: "#06B6D4" },
-  "responsive design": { icon: SiCss, color: "#1572B6" },
-  responsive: { icon: SiCss, color: "#1572B6" },
-  flexbox: { icon: SiCss, color: "#1572B6" },
-  grid: { icon: SiCss, color: "#1572B6" },
+  "responsive design": { icon: Palette, color: "#1572B6" },  // ← ganti
+  responsive: { icon: Palette, color: "#1572B6" },           // ← ganti
+  flexbox: { icon: Palette, color: "#1572B6" },              // ← ganti
+  grid: { icon: Palette, color: "#1572B6" },                 // ← ganti
   git: { icon: SiGit, color: "#F05032" },
   github: { icon: SiGit, color: "#F05032" },
   collaboration: { icon: SiGit, color: "#F05032" },
@@ -57,68 +57,66 @@ const skillIconMap = {
 }
 
 function getSkillIcon(name) {
-  const key = name.toLowerCase().trim()
-  return skillIconMap[key] || null
+  const key = name.toLowerCase().trim();
+  return skillIconMap[key] || null;
 }
 
 function CertificateDetail() {
-  const { slug } = useParams()
-  const [cert, setCert] = useState(null)
-  const [relatedCerts, setRelatedCerts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [notFound, setNotFound] = useState(false)
-  const [scrollProgress, setScrollProgress] = useState(0)
-  const [showBackToTop, setShowBackToTop] = useState(false)
+  const { slug } = useParams();
+  const [cert, setCert] = useState(null);
+  const [relatedCerts, setRelatedCerts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   // Fetch certificate by slug
   useEffect(() => {
     async function fetchCertificate() {
       try {
-        setLoading(true)
-        setNotFound(false)
-        const data = await getCertificateBySlug(slug)
+        setLoading(true);
+        setNotFound(false);
+        const data = await getCertificateBySlug(slug);
         if (!data) {
-          setNotFound(true)
-          return
+          setNotFound(true);
+          return;
         }
-        setCert(data)
+        setCert(data);
 
         // Related certificates
-        const all = await getAllCertificates()
-        const related = (all || [])
-          .filter((c) => c.slug !== slug)
-          .slice(0, 3)
-        setRelatedCerts(related)
+        const all = await getAllCertificates();
+        const related = (all || []).filter((c) => c.slug !== slug).slice(0, 3);
+        setRelatedCerts(related);
       } catch (err) {
-        console.error(err)
-        setNotFound(true)
+        console.error(err);
+        setNotFound(true);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
-    fetchCertificate()
-    window.scrollTo({ top: 0 })
-  }, [slug])
+    fetchCertificate();
+    window.scrollTo({ top: 0 });
+  }, [slug]);
 
   // Scroll progress + back-to-top
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY
+      const scrollTop = window.scrollY;
       const docHeight =
-        document.documentElement.scrollHeight - window.innerHeight
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
-      setScrollProgress(progress)
-      setShowBackToTop(scrollTop > 400)
-    }
-    window.addEventListener("scroll", handleScroll)
-    handleScroll()
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+        document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      setScrollProgress(progress);
+      setShowBackToTop(scrollTop > 400);
+    };
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Copy link
   const handleShare = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href)
+      await navigator.clipboard.writeText(window.location.href);
       Swal.fire({
         icon: "success",
         title: "Link dicopy!",
@@ -127,23 +125,23 @@ function CertificateDetail() {
         timer: 1800,
         timerProgressBar: true,
         showConfirmButton: false,
-      })
+      });
     } catch {
       Swal.fire({
         icon: "error",
         title: "Gagal copy",
         text: "Coba copy manual dari address bar.",
         confirmButtonColor: "#D89B5A",
-      })
+      });
     }
-  }
+  };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-  if (loading) return <DetailSkeleton />
-  if (notFound || !cert) return <Navigate to="/" replace />
+  if (loading) return <DetailSkeleton />;
+  if (notFound || !cert) return <Navigate to="/" replace />;
 
   return (
     <main className="relative min-h-screen bg-mocha overflow-hidden">
@@ -265,11 +263,7 @@ function CertificateDetail() {
             className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-10"
           >
             {cert.issuer && (
-              <MetaCard
-                icon={Award}
-                label="Penerbit"
-                value={cert.issuer}
-              />
+              <MetaCard icon={Award} label="Penerbit" value={cert.issuer} />
             )}
             {cert.year && (
               <MetaCard icon={Calendar} label="Tahun" value={cert.year} />
@@ -351,8 +345,8 @@ function CertificateDetail() {
             <SectionTitle icon={Sparkles}>Skill yang Dipelajari</SectionTitle>
             <div className="flex flex-wrap gap-2.5">
               {cert.skills.map((skill) => {
-                const skillData = getSkillIcon(skill)
-                const Icon = skillData?.icon
+                const skillData = getSkillIcon(skill);
+                const Icon = skillData?.icon;
                 return (
                   <motion.div
                     key={skill}
@@ -370,7 +364,7 @@ function CertificateDetail() {
                       {skill}
                     </span>
                   </motion.div>
-                )
+                );
               })}
             </div>
           </motion.div>
@@ -431,7 +425,7 @@ function CertificateDetail() {
         </motion.button>
       )}
     </main>
-  )
+  );
 }
 
 /* ============ SUB COMPONENTS ============ */
@@ -443,7 +437,7 @@ function SectionTitle({ children, icon: Icon }) {
       {Icon && <Icon size={16} className="text-amber" />}
       {children}
     </h2>
-  )
+  );
 }
 
 function MetaCard({ icon: Icon, label, value }) {
@@ -466,7 +460,7 @@ function MetaCard({ icon: Icon, label, value }) {
         <div className="text-sm text-ivory font-medium truncate">{value}</div>
       </div>
     </div>
-  )
+  );
 }
 
 function DetailSkeleton() {
@@ -489,8 +483,10 @@ function DetailSkeleton() {
           <div className="h-16 bg-ivory/5 rounded-2xl animate-pulse" />
           <div className="h-16 bg-ivory/5 rounded-2xl animate-pulse" />
         </div>
-        <div className="aspect-[16/9] bg-mocha-soft border border-ivory/10
-                        rounded-3xl mb-10 animate-pulse" />
+        <div
+          className="aspect-[16/9] bg-mocha-soft border border-ivory/10
+                        rounded-3xl mb-10 animate-pulse"
+        />
         <div className="space-y-3">
           <div className="h-6 w-40 bg-ivory/10 rounded animate-pulse" />
           <div className="h-4 bg-ivory/5 rounded animate-pulse" />
@@ -498,7 +494,7 @@ function DetailSkeleton() {
         </div>
       </div>
     </main>
-  )
+  );
 }
 
-export default CertificateDetail
+export default CertificateDetail;
