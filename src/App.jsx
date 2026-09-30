@@ -2,6 +2,7 @@ import { Routes, Route, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ScrollToHash from "./components/ScrollToHash" 
 import Home from "./pages/Home";
 import ProjectDetail from "./pages/ProjectDetail";
 import CertificateDetail from "./pages/CertificateDetail";
@@ -26,6 +27,8 @@ function PublicLayout() {
 
 function App() {
   return (
+    <>
+    <ScrollToHash />
     <Routes>
       {/* ============ PUBLIC ROUTES ============ */}
       <Route element={<PublicLayout />}>
@@ -55,6 +58,7 @@ function App() {
         <Route path="certificates/edit/:id" element={<CertificateForm />} />
       </Route>
     </Routes>
+    </>
   );
 }
 
